@@ -29,7 +29,7 @@ export default {
   mounted() {
     // Alias 'this' to use inside inner function
     let component = this 
-    this.$K('endpoints')  // Connect to 'endpoints' endpoint
+    this.$K.endpoint('endpoints')  // Connect to 'endpoints' endpoint
       .find()             // Get all records
       .then(response => { // Then save data to our local state
         component.endpoints = response.data 
