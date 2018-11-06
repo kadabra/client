@@ -1,6 +1,6 @@
 # Kadabra Client
 
-A Feathers Client wired to connect to your local kadabra server
+A Feathers Client wired to connect to your local kadabra server, with .service() renamed to .endpoint()
 
 `npm i --save @kadabra/client`
 
@@ -10,7 +10,7 @@ import kadabra from '@kadabra/client'
 kadabra.endpoint('foo').create({ bar: "baz" })
 ```
 
-Also includes Vue plugin to bind client.endpoint to `vm.$K` (for Kadabra):
+Also includes Vue plugin to bind kadabra.endpoint to `vm.$K` (for Kadabra):
 
 ```js
 import Vue from 'vue'
@@ -29,7 +29,7 @@ export default {
   mounted() {
     // Alias 'this' to use inside inner function
     let component = this 
-    this.$K.endpoint('endpoints')  // Connect to 'endpoints' endpoint
+    this.$K('endpoints')  // Connect to 'endpoints' endpoint
       .find()             // Get all records
       .then(response => { // Then save data to our local state
         component.endpoints = response.data 

@@ -7,15 +7,15 @@ import { CookieStorage } from 'cookie-storage'
 
 const socket = io('http://localhost:7777', {transports: ['websocket']})
 
-const feathersClient = feathers()
+const kadabra = feathers()
   .configure(socketio(socket))
   .configure(auth({ storage: new CookieStorage() }))
   .configure(reactive({idField:'_id'}))
 
-feathersClient.endpoint = feathersClient.service
+kadabra.endpoint = kadabra.service
 
-feathersClient.install = (Vue) => {
-  Vue.prototype.$K = feathersClient
+kadabra.install = (Vue) => {
+  Vue.prototype.$K = name => kadabra.endpoint(name)
 } 
 
-export default feathersClient
+export default kadabra

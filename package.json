@@ -1,6 +1,6 @@
 {
   "name": "@kadabra/client",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Kadabra JS client",
   "main": "src/index.js",
   "scripts": {
