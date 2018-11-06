@@ -15,7 +15,7 @@ const feathersClient = feathers()
 feathersClient.endpoint = feathersClient.service
 
 feathersClient.install = (Vue) => {
-  Vue.$K = feathersClient.endpoint
+  Vue.prototype.$K = feathersClient.endpoint
 } 
 
 export default feathersClient
