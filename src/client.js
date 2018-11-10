@@ -5,7 +5,7 @@ import auth from '@feathersjs/authentication-client'
 import io from 'socket.io-client'
 import { CookieStorage } from 'cookie-storage'
 
-export default (name, host="http://localhost:7777") => {
+export default (host="http://localhost:7777") => name => {
   const socket = io(host, {transports: ['websocket']})
 
   const client = feathers()
