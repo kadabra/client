@@ -5,3 +5,5 @@
 - watch, stream, streamOne
 - updated readme
 - init changelog
+- folded all of the client into the factory function so that host can be configured
+- expose full feathers client as .client
