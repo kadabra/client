@@ -4,9 +4,16 @@ Connect to your local kadabra server
 
 `npm i --save @kadabra/client`
 
-```js
-import kadabra from '@kadabra/client'
+### Setup
 
+```js
+import client from '@kadabra/client'
+let kadabra = client() // connect to local Kadabra server
+// OR 
+let kadabra = client('foo.com:7777') // connect to other kadabra or feathers server
+```
+
+```js
 let spellbook = []
 kadabra('spells')
   .find({ query: { element: "Fire" } })
