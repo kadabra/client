@@ -1,58 +1,41 @@
 # Kadabra Client
 
-A Feathers Client wired to connect to your local kadabra server, with .service() renamed to .endpoint()
+Connect to your local kadabra server
 
 `npm i --save @kadabra/client`
 
 ```js
 import kadabra from '@kadabra/client'
 
-kadabra.endpoint('foo').create({ bar: "baz" })
+let spellbook = []
+kadabra('spells')
+  .find({ query: { element: "Fire" } })
+  .then(fireSpells => spellbook.concat(fireSpells))
 ```
 
-Also includes Vue plugin to bind kadabra.endpoint to `vm.$K` (for Kadabra):
+Kadabra is built on top of Feathers. Refer to [Feathers Service Methods Documentation](https://docs.feathersjs.com/api/services#service-methods) for the basic API: find, get, create, update, patch, and remove.
+
+Kadabra also leverages [feathers-reactive](https://github.com/feathersjs-ecosystem/feathers-reactive) which uses RxJS to make it much easier to work with realtime events:
 
 ```js
-import Vue from 'vue'
-import kadabra from '@kadabra/client'
-
-Vue.use(kadabra)
+let potions = []
+let subscription = kadabra('potions')
+  .watch() // after watch(), find or get will return observables
+  .find()
+  .subscribe(pots => { potions = pots }) 
+  // full setter will be ran on every re-fetch, keeps `potions` constantly up-to-date with realtime updates
 ```
 
-Then in a Vue component:
+This pattern and the `get` version are so common that Kadabra provides these helper methods (params are optional just as with regular watch and find):
 
 ```js
-export default {
-  data: () => ({
-    endpoints: [], // Prime the data object
-  }),
-  mounted() {
-    // Alias 'this' to use inside inner function
-    let component = this 
-    this.$K('endpoints')  // Connect to 'endpoints' endpoint
-      .find()             // Get all records
-      .then(response => { // Then save data to our local state
-        component.endpoints = response.data 
-      })
-  }
-}
-```
+kadabra('scrolls')
+  .stream(findParams, watchParams)
+  .subscribe(scroll => alert('Found ' + scroll)) 
+// same as .watch(watchParams).find(findParams) -- a realtime get-all
 
-For real-time in a Vue component:
-
-```js
-export default {
-  data: () => ({
-    endpoints: [], // Prime the data object
-  }),
-  mounted() {
-    let component = this 
-    this.$K('endpoints')
-      .watch() // Creates the watcher for realtime updates
-      .find()
-      .then(response => {
-        component.endpoints = response.data 
-      })
-  }
-}
+kadabra('enchantments')
+  .streamOne(id, getParams, watchParams)
+  .subscribe(ench => console.log(`You're now enchanted with ${ench}`)) 
+// same as .watch(watchParams).get(getParams) -- a realtime get-one
 ```
