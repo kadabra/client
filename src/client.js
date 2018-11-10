@@ -5,17 +5,29 @@ import auth from '@feathersjs/authentication-client'
 import io from 'socket.io-client'
 import { CookieStorage } from 'cookie-storage'
 
-const socket = io('http://localhost:7777', {transports: ['websocket']})
+export default (name, host="http://localhost:7777") => {
+  const socket = io(host, {transports: ['websocket']})
 
-const kadabra = feathers()
-  .configure(socketio(socket))
-  .configure(auth({ storage: new CookieStorage() }))
-  .configure(reactive({idField:'_id'}))
+  const client = feathers()
+    .configure(socketio(socket))
+    .configure(auth({ storage: new CookieStorage() }))
+    .configure(reactive({idField:'_id'}))
 
-kadabra.endpoint = kadabra.service
-
-kadabra.install = (Vue) => {
-  Vue.prototype.$K = name => kadabra.endpoint(name)
-} 
-
-export default kadabra
+  let endpoint = client.service(name)
+  return {
+    client,
+    
+    // Primitives
+    watch(params) { return endpoint.watch(params) },
+    find(params) { return endpoint.find(params) },
+    get(id, params) { return endpoint.get(id, params) },
+    create(data, params) { return endpoint.create(data, params) },
+    update(id, data, params) { return endpoint.update(id, data, params) },
+    patch(id, data, params) { return endpoint.patch(id, data, params) },
+    remove(id, params) { return endpoint.remove(id, params) },
+  
+    // Macros
+    stream(findParams={}, watchParams={}) { return await endpoint(name).watch(watchParams).find(findParams) },
+    streamOne(id, getParams={}, watchParams={}) { return await endpoint(name).watch(watchParams).get(id, getParams) },
+  }
+}
