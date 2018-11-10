@@ -27,7 +27,7 @@ export default (name, host="http://localhost:7777") => {
     remove(id, params) { return endpoint.remove(id, params) },
   
     // Macros
-    stream(findParams={}, watchParams={}) { return await endpoint(name).watch(watchParams).find(findParams) },
-    streamOne(id, getParams={}, watchParams={}) { return await endpoint(name).watch(watchParams).get(id, getParams) },
+    stream(findParams={}, watchParams={}) { return endpoint(name).watch(watchParams).find(findParams) },
+    streamOne(id, getParams={}, watchParams={}) { return endpoint(name).watch(watchParams).get(id, getParams) },
   }
 }
