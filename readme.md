@@ -13,6 +13,8 @@ let kadabra = client() // connect to local Kadabra server
 let kadabra = client('foo.com:7777') // connect to other kadabra or feathers server
 ```
 
+### Examples
+
 ```js
 let spellbook = []
 kadabra('spells')
