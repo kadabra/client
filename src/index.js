@@ -1,3 +1,1 @@
-import client from './client'
-
-export default client
+export { feathersClient, kadabraClient as default } from './clients'
