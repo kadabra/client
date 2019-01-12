@@ -5,7 +5,9 @@ import auth from '@feathersjs/authentication-client'
 import io from 'socket.io-client'
 import { CookieStorage } from 'cookie-storage'
 
-export const feathersClient = (host) => {
+const hostname = window.location.hostname ? window.location.hostname : ''
+
+export const feathersClient = (host=`${hostname}:7777`) => {
   const socket = io(host, { transports: ['websocket']})
   return feathers()
     .configure(socketio(socket))
@@ -13,7 +15,6 @@ export const feathersClient = (host) => {
     .configure(reactive({idField:'_id'}))
 }
 
-const hostname = window.location.hostname ? window.location.hostname : ''
 export const kadabraClient = (host=`${hostname}:7777`) => name => {
   const client = feathersClient(host)
   let endpoint = client.service(name)

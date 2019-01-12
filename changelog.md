@@ -1,10 +1,9 @@
 # Changelog
 
-### [0.5.2] - 2019-01-12
+### [0.5.1] to [0.5.3] - 2019-01-12
 Bug fixes
-
-### [0.5.1] - 2019-01-12
-Exported feathers client
+Exported feathers clients
+client now connects to port 7777 always
 
 ## [0.5.0] - 2019-01-11
 ### Added
