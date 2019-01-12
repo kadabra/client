@@ -1,6 +1,6 @@
 {
   "name": "@kadabra/client",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "description": "Kadabra JS client",
   "main": "src/index.js",
   "scripts": {
@@ -12,7 +12,6 @@
     "@feathersjs/authentication-client": "^1.0.8",
     "@feathersjs/feathers": "^3.2.3",
     "@feathersjs/socketio-client": "^1.1.5",
-    "@vue-feathers/vue-feathers": "^0.2.0",
     "cookie-storage": "^3.2.0",
     "feathers-reactive": "^0.7.2",
     "socket.io-client": "^2.1.1"
