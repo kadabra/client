@@ -1,5 +1,8 @@
 # Changelog
 
+## [0.5.1] - 2019-01-12
+Exported feathers client
+
 ## [0.5.0] - 2019-01-11
 ### Added
 - authenticate

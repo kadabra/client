@@ -5,19 +5,21 @@ import auth from '@feathersjs/authentication-client'
 import io from 'socket.io-client'
 import { CookieStorage } from 'cookie-storage'
 
-export default (host="http://localhost:7777", auth=null) => name => {
-  const socket = io(host, {transports: ['websocket']})
-
-  const client = feathers()
+export function feathersClient(host) {
+  const socket = io(host, { transports: ['websocket']})
+  return feathers()
     .configure(socketio(socket))
     .configure(auth({ storage: new CookieStorage() }))
     .configure(reactive({idField:'_id'}))
+}
 
+export default (host="http://localhost:7777", auth=null) => name => {
+  const client = feathersClient(host)
   let endpoint = client.service(name)
 
   return {
     client,
-    
+
     // Base methods
     authenticate: () => client.authenticate(),
     logout: () => client.authenticate(),
