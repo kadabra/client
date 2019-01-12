@@ -13,7 +13,8 @@ export const feathersClient = (host) => {
     .configure(reactive({idField:'_id'}))
 }
 
-export const kadabraClient = (host="http://localhost:7777") => name => {
+const hostname = window.location.hostname ? window.location.hostname : ''
+export const kadabraClient = (host=`${hostname}:7777`) => name => {
   const client = feathersClient(host)
   let endpoint = client.service(name)
 
