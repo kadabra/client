@@ -1,10 +1,10 @@
 # Kadabra Client
 
-Connect to your local kadabra server
+Connect to a kadabra server.
 
 `npm i --save @kadabra/client`
 
-### Setup
+## Setup
 
 ```js
 import client from '@kadabra/client'
@@ -13,6 +13,8 @@ let kadabra = client() // connect to local Kadabra server
 let kadabra = client('foo.com:7777') // connect to other kadabra or feathers server
 ```
 
+#### Quick Example
+
 ```js
 let spellbook = []
 kadabra('spells')
@@ -20,29 +22,48 @@ kadabra('spells')
   .then(fireSpells => spellbook.concat(fireSpells))
 ```
 
-Kadabra is built on top of Feathers. Refer to [Feathers Service Methods Documentation](https://docs.feathersjs.com/api/services#service-methods) for the basic API: find, get, create, update, patch, and remove.
+## API
 
-Kadabra also leverages [feathers-reactive](https://github.com/feathersjs-ecosystem/feathers-reactive) which uses RxJS to make it much easier to work with realtime events:
+Kadabra is built on top of Feathers. Refer to [Feathers Service Methods Documentation](https://docs.feathersjs.com/api/services#service-methods) for further detail if needed, but in most cases this is enough without reading it:
+
+```js
+get(id)
+find() // "get many"; see feathers docs for how to query
+create(obj) 
+remove(id)
+update(id, obj) // replace current object
+patch(id, obj) // merge into current object
+```
+
+Kadabra also leverages [feathers-reactive](https://github.com/feathersjs-ecosystem/feathers-reactive) and [feathers authentication client](https://github.com/feathersjs-ecosystem/feathers-reactive) to add:
+
+```js
+watch(params) // see feathers-reactive or see below
+authenticate() // Call once to (re)authenticate
+login({ email: 'foo', password: 'bar' })
+```
+
+We've also added:
+
+```js
+removeMany(params)
+```
+
+## Realtime Example
 
 ```js
 let potions = []
 let subscription = kadabra('potions')
-  .watch() // after watch(), find or get will return observables
+  .watch() // after watch(), find and get return observables you subscribe to
   .find()
-  .subscribe(pots => { potions = pots }) 
-  // full setter will be ran on every re-fetch, keeps `potions` constantly up-to-date with realtime updates
+  .subscribe(pots => { potions = pots }) // this will be re-ran every update
 ```
 
-This pattern and the `get` version are so common that Kadabra provides these helper methods (params are optional just as with regular watch and find):
+This pattern is so common that we provide this helper methods:
 
 ```js
-kadabra('scrolls')
-  .stream(findParams, watchParams)
-  .subscribe(scroll => alert('Found ' + scroll)) 
-// same as .watch(watchParams).find(findParams) -- a realtime get-all
-
-kadabra('enchantments')
-  .streamOne(id, getParams, watchParams)
-  .subscribe(ench => console.log(`You're now enchanted with ${ench}`)) 
-// same as .watch(watchParams).get(getParams) -- a realtime get-one
+let subscription = kadabra('scrolls')
+  .stream(scroll => alert('Found ' + scroll))
 ```
+
+> **Note** - The `subscription` object has a `.unsubscribe()` method to cancel that subscription!

@@ -5,7 +5,7 @@ import auth from '@feathersjs/authentication-client'
 import io from 'socket.io-client'
 import { CookieStorage } from 'cookie-storage'
 
-export default (host="http://localhost:7777") => name => {
+export default (host="http://localhost:7777", auth=null) => name => {
   const socket = io(host, {transports: ['websocket']})
 
   const client = feathers()
@@ -14,20 +14,28 @@ export default (host="http://localhost:7777") => name => {
     .configure(reactive({idField:'_id'}))
 
   let endpoint = client.service(name)
+
   return {
     client,
     
-    // Primitives
-    watch(params) { return endpoint.watch(params) },
-    find(params) { return endpoint.find(params) },
-    get(id, params) { return endpoint.get(id, params) },
-    create(data, params) { return endpoint.create(data, params) },
-    update(id, data, params) { return endpoint.update(id, data, params) },
-    patch(id, data, params) { return endpoint.patch(id, data, params) },
-    remove(id, params) { return endpoint.remove(id, params) },
+    // Base methods
+    authenticate: () => client.authenticate(),
+    logout: () => client.authenticate(),
+    
+    watch: (params) => endpoint.watch(params),
+    
+    get: (id, params) => endpoint.get(id, params),
+    find: (params) => endpoint.find(params),
+    create: (data, params) => endpoint.create(data, params),
+    update: (id, data, params) => endpoint.update(id, data, params),
+    patch: (id, data, params) => endpoint.patch(id, data, params),
+    removeMany: (params) => endpoint.remove(null, params),
+    remove: (id, params) => {
+      if (id) endpoint.remove(id, params)
+      else throw new Error("Falsey id passed to remove(id, params). Use the removeMany(params) if this was your intent, and use it with great caution!") 
+    },
   
-    // Macros
-    stream(findParams={}, watchParams={}) { return endpoint(name).watch(watchParams).find(findParams) },
-    streamOne(id, getParams={}, watchParams={}) { return endpoint(name).watch(watchParams).get(id, getParams) },
+    // Composite methods
+    stream: func => endpoint(name).watch().find().subscribe(func)
   }
 }
