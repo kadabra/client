@@ -66,4 +66,4 @@ let subscription = kadabra('scrolls')
   .stream(scroll => alert('Found ' + scroll))
 ```
 
-> **Note** - The `subscription` object has a `.unsubscribe()` method to cancel that subscription!
+> **Note** - The `subscription` object has a `.unsubscribe()` method to cancel that subscription! 
