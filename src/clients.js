@@ -15,7 +15,7 @@ export const feathersClient = (host=`${hostname}:7777`) => {
     .configure(reactive({idField:'_id'}))
 }
 
-export const kadabraClient = (host=`${hostname}:7777`) => name => {
+export const kadabraClient = (host=`${hostname}:7777`) => (name='') => {
   const client = feathersClient(host)
   let endpoint = client.service(name)
 
