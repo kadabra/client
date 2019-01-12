@@ -5,7 +5,7 @@ import auth from '@feathersjs/authentication-client'
 import io from 'socket.io-client'
 import { CookieStorage } from 'cookie-storage'
 
-const hostname = window.location.hostname ? window.location.hostname : ''
+const hostname = window ? window.location.hostname : 'localhost' // SSR has no window object 
 
 export const feathersClient = (host=`${hostname}:7777`) => {
   const socket = io(host, { transports: ['websocket']})
@@ -23,8 +23,8 @@ export const kadabraClient = (host=`${hostname}:7777`) => (name='') => {
     client,
 
     // Base methods
-    authenticate: () => client.authenticate(),
-    logout: () => client.authenticate(),
+    authenticate: (params) => client.authenticate(Object.assign({}, params, {strategy: 'local'})),
+    logout: () => client.logout(),
     
     watch: (params) => endpoint.watch(params),
     
