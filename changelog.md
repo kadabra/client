@@ -1,5 +1,8 @@
 # Changelog
 
+## [0.6.0] - 2019-01-14
+Exposed feathers cleint input in kadabra client initializer
+
 ### [0.5.1] to [0.5.5] - 2019-01-12
 Bug fixes
 Exported feathers clients
